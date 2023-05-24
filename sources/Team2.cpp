@@ -9,6 +9,7 @@ using namespace std;
 namespace ariel{
     Team2::Team2(Character* leader): Team(leader){}
 
+    
     void Team2::attack(Team *enmy)
     {
         if (enmy == nullptr)
@@ -27,9 +28,9 @@ namespace ariel{
         {
             throw std::runtime_error("The team is dead.");
         }
-        if (!this->_leader->isAlive())
+        if (!this->getLeader()->isAlive())
         {
-            _leader = closestToLeader(_leader, this);
+            this->setLeader(closestToLeader(_leader, this));
         }
         Character *vict = closestToLeader(_leader, enmy);
 
@@ -37,7 +38,7 @@ namespace ariel{
         {
             if(!vict->isAlive()){
                 if(enmy->stillAlive() == 0){
-                    break;
+                    exit(0);
                 }
                 vict = closestToLeader(_leader, enmy);
             }
@@ -47,9 +48,7 @@ namespace ariel{
                     c->reload();
                 }
                 else{
-                    // while(c->hasboolets()){
-                        c->shoot(vict);
-                    // }
+                    c->shoot(vict);
                 }
             }
             Ninja *n = dynamic_cast<Ninja*>(mem);
@@ -62,5 +61,14 @@ namespace ariel{
                 }
             }
         }
+    }
+
+    void Team2::print() const
+    {
+        string st = "";
+        for(Character* mem:_members){
+            st += mem->print();
+        }
+        cout << st << endl;
     }
 }

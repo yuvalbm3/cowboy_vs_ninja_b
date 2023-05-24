@@ -77,9 +77,9 @@ namespace ariel
         {
             throw std::runtime_error("The team is dead.");
         }
-        if (!this->_leader->isAlive())
+        if (!this->getLeader()->isAlive())
         {
-            _leader = closestToLeader(_leader, this);
+            this->setLeader(closestToLeader(_leader, this));
         }
         Character *vict = closestToLeader(_leader, enmy);
 
@@ -87,7 +87,7 @@ namespace ariel
         {
             if(!vict->isAlive()){
                 if(enmy->stillAlive() == 0){
-                    exit(0);
+                    break;
                 }
                 vict = closestToLeader(_leader, enmy);
             }
@@ -97,10 +97,17 @@ namespace ariel
                     c->reload();
                 }
                 else{
-                    // while(c->hasboolets()){
-                        c->shoot(vict);
-                    // }
+                    c->shoot(vict);
                 }
+            }
+        }
+        for (Character *mem : this->_members)
+        {
+            if(!vict->isAlive()){
+                if(enmy->stillAlive() == 0){
+                    exit(0);
+                }
+                vict = closestToLeader(_leader, enmy);
             }
             Ninja *n = dynamic_cast<Ninja*>(mem);
             if(n != nullptr && n->isAlive()){
@@ -144,6 +151,14 @@ namespace ariel
         return st_live;
     }
 
+    Character* Team::getLeader() const{
+        return _leader;
+    }
+
+    void Team::setLeader(Character* new_leader){
+        _leader = new_leader;
+    }
+    
     int Team::getSize() const
     {
         return team_size;
@@ -152,10 +167,20 @@ namespace ariel
     void Team::print()
     {
         string st = "";
-        for(Character* mem:_members){
-            st += mem->print();
+        for (Character *mem : this->_members)
+        {
+            Cowboy *c = dynamic_cast<Cowboy*>(mem);
+            if(c != nullptr){
+                st += mem->print();
+            }
+        }
+        for (Character *mem : this->_members)
+        {
+            Ninja *n = dynamic_cast<Ninja*>(mem);
+            if(n != nullptr && n->isAlive()){
+                st += mem->print();
+            }
         }
         cout << st << endl;
-
     }
 }

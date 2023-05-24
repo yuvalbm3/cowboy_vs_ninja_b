@@ -14,8 +14,6 @@ namespace ariel{
     private:
         Character* _leader;
         vector<Character *> _members;
-        vector<Cowboy *> _cowboys;
-        vector<Ninja *> _ninjas; 
         int team_size = 0;
     public:
         Team(Character* leader);
@@ -24,6 +22,8 @@ namespace ariel{
         void add(Character*);
         int stillAlive() const;
         int getSize() const;
+        Character* getLeader() const;
+        void setLeader(Character*);
         Character* closestToLeader(Character*, Team*);
         virtual void attack(Team* other);
         virtual void print();
